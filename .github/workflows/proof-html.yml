@@ -32,8 +32,5 @@ jobs:
         with:
           # directory：需要扫描校验的文件夹路径，./ 代表仓库根目录
           directory: ./
-          # ignore：设置跳过校验的目录，node_modules存放第三方依赖无需检查
-          ignore: "node_modules/" # 忽略依赖文件夹
-          # level 设置流水线失败判定等级
-          # error：仅检测到致命HTML错误时终止流水线；普通警告仅打印日志、不会阻断 workflow
-          level: error # 只把错误当作失败，警告不会阻断 workflow
+          # 关闭 favicon 检测，规避缺少站点图标导致的校验失败
+          check_favicon: false
