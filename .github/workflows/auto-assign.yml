@@ -17,11 +17,10 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      # 执行 Issue、PR 自动指派
+      # 执行 Issue、PR 自动指派，强制采用 Node.js24 规避Node20弃用告警
       - name: "Auto-assign issue"
         uses: pozil/auto-assign-issue@v1.6.0
         env:
-          # Force‑run this javascript‑based action under Node.js 24, eliminate deprecation warning
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
