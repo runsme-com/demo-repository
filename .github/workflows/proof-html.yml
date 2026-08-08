@@ -1,11 +1,21 @@
+# 流水线名称
 name: Proof HTML
+
+# 触发条件
 on:
+  # 任意代码推送时触发工作流
   push:
+  # 支持手动在网页端点击按钮启动流水线
   workflow_dispatch:
+
 jobs:
+  # 任务名 build
   build:
+    # 使用最新 Ubuntu 虚拟机
     runs-on: ubuntu-latest
     steps:
+      # 调用 html 校验工具 anishathalye/proof‑html v1.1.0
       - uses: anishathalye/proof-html@v1.1.0
         with:
+          # 校验根目录 ./ 下面所有 HTML
           directory: ./
