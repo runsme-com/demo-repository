@@ -1,21 +1,39 @@
-# 流水线名称
+# 定义该 GitHub‑Actions 工作流对外显示名称
 name: Proof HTML
 
-# 触发条件
+# 工作流触发规则配置
 on:
-  # 任意代码推送时触发工作流
+  # 代码推送事件触发流水线
   push:
-  # 支持手动在网页端点击按钮启动流水线
-  workflow_dispatch:
+    # 限定仅 main 分支提交推送之后执行流水线，减少不必要的CI运行开销
+    branches: ["main"] # 仅 main 分支推送触发，减少无用运行
+  # workflow_dispatch：允许操作人员在 GitHub 网页端手动点击按钮启动流水线
+  workflow_dispatch: # 支持手动启动
 
+# jobs：流水线任务列表，可以配置多项独立任务
 jobs:
-  # 任务名 build
+  # 当前任务标识符命名为 build，名称可自定义
   build:
-    # 使用最新 Ubuntu 虚拟机
+    # 指定CI运行虚拟机系统环境，选用最新版 Ubuntu‑Linux
     runs-on: ubuntu-latest
+
+    # steps：当前任务内按从上至下顺序执行的操作步骤
     steps:
-      # 调用 html 校验工具 anishathalye/proof‑html v1.1.0
-      - uses: anishathalye/proof-html@v1.1.0
+      # 第一步：拉取你仓库全部文件到虚拟机，必不可少！
+      - name: Checkout repository source
+        # 调用官方代码检出工具 v4，下载仓库源码至虚拟机工作目录
+        uses: actions/checkout@v4
+
+      # HTML校验：执行网页源代码静态检查，校验标签、链接、语法问题
+      - name: Run‑through HTML validator
+        # 调用第三方 HTML 校验 Action，锁定 v1.1.0 固定版本防止破坏性更新
+        uses: anishathalye/proof-html@v1.1.0
+        # 向校验工具传入自定义运行参数
         with:
-          # 校验根目录 ./ 下面所有 HTML
+          # directory：需要扫描校验的文件夹路径，./ 代表仓库根目录
           directory: ./
+          # ignore：设置跳过校验的目录，node_modules存放第三方依赖无需检查
+          ignore: "node_modules/" # 忽略依赖文件夹
+          # level 设置流水线失败判定等级
+          # error：仅检测到致命HTML错误时终止流水线；普通警告仅打印日志、不会阻断 workflow
+          level: error # 只把错误当作失败，警告不会阻断 workflow
