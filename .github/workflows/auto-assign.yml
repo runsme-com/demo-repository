@@ -27,4 +27,3 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           assignees: Skixkk
           numOfAssignee: 1
-          removePreviousAssignees: true
