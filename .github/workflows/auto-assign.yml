@@ -24,5 +24,7 @@ jobs:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: 24
+          cache: npm # or pnpm / yarn
           assignees: Skixkk
           numOfAssignee: 1
