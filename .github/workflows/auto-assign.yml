@@ -1,15 +1,9 @@
-# 定义该 GitHub‑Actions 工作流对外显示名称
 name: Auto Assign
-
-# 工作流触发规则配置
 on:
   issues:
-    # 仅在新建 Issue 的时候触发
     types: [opened]
   pull_request:
-    # 仅在新建PR的时候触发
     types: [opened]
-
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -17,12 +11,9 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      # 执行 Issue、PR 自动指派，强制采用 Node.js24 规避Node20弃用告警
-      - name: "Auto-assign issue"
-        uses: pozil/auto-assign-issue@v1.6.0
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-        with:
+    - name: 'Auto-assign issue'
+      uses: pozil/auto-assign-issue@v1
+      with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           assignees: Skixkk
           numOfAssignee: 1
