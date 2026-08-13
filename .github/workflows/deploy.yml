@@ -2,9 +2,9 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch: # 支持手动在 Actions 页面触发
 
 # 必须配置 pages 权限，允许部署到 GitHub Pages
@@ -36,7 +36,8 @@ jobs:
           path: ./ # 使用仓库根目录作为网站根，index.html为首页
 
   deploy:
-    # 依赖 build 任务完成后才执行发布
+    # 关键：只有 main 分支 push 事件才执行 deploy，PR直接跳过此job
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
