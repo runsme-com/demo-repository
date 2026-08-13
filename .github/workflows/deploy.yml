@@ -1,0 +1,48 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch: # 支持手动在 Actions 页面触发
+
+# 必须配置 pages 权限，允许部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 并发：只允许一个部署，排队等待，避免重复发布
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 配置 GitHub Pages 环境
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 上传站点产物，直接把根目录所有静态文件(index.html等)作为网站资源
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./ # 使用仓库根目录作为网站根，index.html为首页
+
+  deploy:
+    # 依赖 build 任务完成后才执行发布
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
