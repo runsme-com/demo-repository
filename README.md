@@ -48,3 +48,7 @@ This repository serves as a **practice playground** for new members joining the 
 
 1. Fork this repository to your own GitHub account
 2. Clone your fork locally
+
+## Contributors
+
+- [Alininin](https://github.com/Alininin)
